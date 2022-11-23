@@ -1,5 +1,7 @@
 package com.member.bootController;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,23 +15,21 @@ import com.member.vo.MemberVO;
 @RestController
 @CrossOrigin(origins = "*",maxAge = 3600)
 @RequestMapping(path = {"/api"})
-public class login {
+public class CheckAccount {
 	@Autowired
 	private MemberServiceImpl service;
 	
-	
-	
-	@RequestMapping(path = "/login")
+	@RequestMapping(path = {"/checkAccount"})
 	@PostMapping
-	public MemberVO postLogin(@RequestBody MemberVO member) {
-//		Integer id = member.getMember_id();
-		String account = member.getAccount();
-		String password = member.getPassword();
+	public MemberVO checkAccount(@RequestBody MemberVO member,HttpSession session) {
 		
-//		session.setAttribute("userId", id);
-		MemberVO member1 = service.login(account, password);
+		member = service.forgetPass(member);
+		System.out.println(member);
+		if (member.isSuccessful()) {
+			session.setAttribute("forget", member);
+		}
+		System.out.println(member.isSuccessful());
 		
-		member1.setJwt(service.verifyUser(account, password));
-		return member1;
+		return member;
 	}
 }

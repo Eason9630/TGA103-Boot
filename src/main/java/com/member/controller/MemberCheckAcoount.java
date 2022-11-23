@@ -23,7 +23,7 @@ public class MemberCheckAcoount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Gson _gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
     private MemberService service;
-    
+   
 	@Override
 	public void init() throws ServletException {
 			service = new MemberServiceImpl();
